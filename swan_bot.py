@@ -26,7 +26,7 @@ print("Environment IMPORTS Completed!")
 TIMEZONE = pytz.timezone('America/Araguaina') #if you do see this code....don't ask me how....all i know is that it works
 TODAY_DAY = TIMEZONE.localize(datetime.now()).day
 
-def still_today():
+def still_today() -> bool:
     #return bool value to show if today is still today
     today_day = TIMEZONE.localize(datetime.now()).day
     if today_day != TODAY_DAY:
