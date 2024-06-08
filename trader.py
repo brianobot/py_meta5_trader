@@ -11,33 +11,35 @@
 """
 import pandas as pd
 import MetaTrader5 as mt5
+from typing import Literal
 
-DEV_MODE = True #REMEMBER to deactivate when deploying for use
+DEBUG = True
 
 class Trader:
-    def __init__(self, account, symbol='EURUSD'):
-        self.id = "Brian's Trader Instance"
+    def __init__(
+            self, account: int, password: str, server: str, 
+            symbol='EURUSD', lot: float = 0.01, deviation: int = 20, 
+            timeframe = mt5.TIMEFRAME_M1
+        ):
         self.account = account
-        self.symbol =  symbol #symbol to be used...
-        self.lot = 0.01 #lot size
-        self.deviation = 20 #
-        self.timeframe = mt5.TIMEFRAME_M1 #timeframe....one minute is recommended for the power of this project
+        self.password = password
+        self.server = server
+        self.symbol =  symbol
+        self.lot = lot
+        self.deviation = deviation
+        self.timeframe = timeframe #timeframe....one minute is recommended for the power of this project
         self.trades = {}
         self.gains = {}
+        self.login()
         print(f"Trader instance has been created with following settings: \n[ACCOUNT_NUMBER]: {self.account}\n[SYMBOL]: {self.symbol}\n[LOT_SIZE]: {self.lot}")
 
-    def login(self, account: str) -> bool:
-        '''method to login to specified account number'''
-        if mt5.login(self.account):
-            print(f'CONNECTED to [{account}]')
-            return True
-        else:
-            print(f'FAILED to CONNECT to [{account}]')
-            return False
+    def login(self) -> bool:
+        authenticated = mt5.login(self.account, self.password, self.server)
+        print(f'CONNECTED to [{self.account} = {authenticated}]')
+        return authenticated
         
     def get_account_info() -> dict:
         info = mt5.account_info()._asdict()
-        print(f"🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷 {info = }")
 
     def setup_buyRequest(self):
         symbol_info = mt5.symbol_info(self.symbol)

@@ -50,7 +50,7 @@ def initialize():
 class Task():
     def __init__(self, trader):
         self.trader = trader
-        self.task_id = trader.id
+        self.task_id = id(trader)
 
     def run(self):
         ''' the main trading actions block..to be rerun in a loop for all time validity of
@@ -99,6 +99,7 @@ class Task():
     def make_trade_decision(self, close_value):
         print("Making trade decision here")
 
+
 class TraderManager():
     def __init__(self, tasks=None):
         self.ready = Queue()
@@ -139,14 +140,10 @@ if __name__ == "__main__":
     initialize() # use this function object to connect the script to the metatrader5 platform
     
     task_1 = Task(Trader(48593620))
-    task_2 = Task(Lot(48593620))
-    task_3 = Task(Lottier(48593620))
 
-    engine = TraderManager()
-    
+    engine = TraderManager()    
+
     engine.new(task_1)
-    engine.new(task_2)
-    engine.new(task_3)
     
     engine.mainloop()
 
