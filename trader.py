@@ -14,7 +14,7 @@ import MetaTrader5 as mt5
 
 DEV_MODE = True #REMEMBER to deactivate when deploying for use
 
-class Trader(object):
+class Trader:
     def __init__(self, account, symbol='EURUSD'):
         self.id = "Brian's Trader Instance"
         self.account = account
@@ -26,7 +26,7 @@ class Trader(object):
         self.gains = {}
         print(f"Trader instance has been created with following settings: \n[ACCOUNT_NUMBER]: {self.account}\n[SYMBOL]: {self.symbol}\n[LOT_SIZE]: {self.lot}")
 
-    def login(self, account):
+    def login(self, account: str) -> bool:
         '''method to login to specified account number'''
         if mt5.login(self.account):
             print(f'CONNECTED to [{account}]')
@@ -34,6 +34,10 @@ class Trader(object):
         else:
             print(f'FAILED to CONNECT to [{account}]')
             return False
+        
+    def get_account_info() -> dict:
+        info = mt5.account_info()._asdict()
+        print(f"🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷 {info = }")
 
     def setup_buyRequest(self):
         symbol_info = mt5.symbol_info(self.symbol)
