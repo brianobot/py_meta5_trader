@@ -1,2 +1,4 @@
 venv/
 .env
+candle_history.csv
+data_sample.csv

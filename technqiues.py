@@ -13,9 +13,6 @@ def get_MACD(x, timeperiod=14):
     #return macd[0], macd[1], macd[2]
     return "MACD Coming soon!"
 
-def test_techniques():
-    pass
-
 def RSI(series, period):
     delta = series.diff().dropna()
     u = delta * 0
