@@ -59,6 +59,10 @@ class Trader:
         print("🔥 IM RSI Value: ", im_rsi_value)
         print("🔥 Candle tales: ", candle_tales)
 
+        candle_sum, candles = candle_tales
+        print("🕯️ Candle sum : ", candle_sum)
+        print("🕯️ Candles    : ", candles)
+        
         return True
 
     def get_data(self, current_time, count=1000):
