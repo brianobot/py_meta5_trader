@@ -97,6 +97,7 @@ class Task():
                 self.trader.place_sell_trade()
             else:
                 print('OH No ....i guess that was a false alert...well let\'s not give up')
+                
         self.make_trade_decision(close_value)
 
     def make_trade_decision(self, close_value):

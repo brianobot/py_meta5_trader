@@ -9,12 +9,18 @@
  * Usage:	    For automated trading of forex on mq5*
  *						                            *
 """
+import pytz
+import indicators
 import pandas as pd
 import MetaTrader5 as mt5
 
+from fortune_cards import candle_sticks
+from datetime import datetime
 from mt5 import Account
 
 DEBUG = True
+TIMEZONE = pytz.timezone('America/Araguaina')
+
 
 class Trader:
     """
@@ -34,53 +40,26 @@ class Trader:
         self.deviation = deviation
         self.timeframe = timeframe
 
-    # def setup_buyRequest(self):
-    #     symbol_info = mt5.symbol_info(self.symbol)
-    #     point = symbol_info.point
-    #     price_buy = mt5.symbol_info_tick(self.symbol).ask 
+    def run(self) -> bool:
+        market_data = self.trader.get_data(self.__class__.localize_time())
+        candle_tales = self.trader.candle_stick_story(market_data, candle_sticks)
 
-    #     request_buy = {
-    #         "action": mt5.TRADE_ACTION_DEAL,
-    #         "symbol": self.symbol,
-    #         "volume": self.lot,
-    #         "type": mt5.ORDER_TYPE_BUY,
-    #         "price": price_buy,
-    #         #"sl": price_buy - 5 * point,
-    #         "tp": price_buy + (5 * point) ,
-    #         "deviation": 20,
-    #         "magic": 234000,
-    #         "comment": "python script open",
-    #         "type_time": mt5.ORDER_TIME_GTC,
-    #         "type_filling": mt5.ORDER_FILLING_RETURN, }
+        close_price = market_data['close']
 
-    #     return request_buy
+        rsi_value = indicators.get_RSI(close_price)
+        macd_value = indicators.get_MACD(close_price)
+        im_rsi_value = indicators.get_RSI(close_price, 4).iloc[-1]
 
-    # def setup_sellRequest(self):
-    #     symbol_info = mt5.symbol_info(self.symbol)
-    #     point = symbol_info.point
-    #     price_sell = mt5.symbol_info_tick(self.symbol).bid 
-
-    #     request_sell = {
-    #         "action": mt5.TRADE_ACTION_DEAL,
-    #         "symbol": self.symbol,
-    #         "volume": self.lot,
-    #         "type": mt5.ORDER_TYPE_SELL,
-    #         "price": price_sell,
-    #         #"sl" : price_sell + 5 * point,
-    #         "tp": price_sell - (5 * point) ,
-    #         "deviation": 20,
-    #         "magic": 234000,
-    #         "comment": "python script close",
-    #         "type_time": mt5.ORDER_TIME_GTC,
-    #         "type_filling": mt5.ORDER_FILLING_RETURN, }
-
-    #     return request_sell
+        print("🔥 Close Price : ", close_price)
+        print("🔥 RSI Value   : ", rsi_value)
+        print("🔥 MACD Value  : ", macd_value)
+        print("🔥 IM RSI Value: ", im_rsi_value)
 
     def get_data(self, current_time, count=1000):
         rates = mt5.copy_rates_from(self.symbol, self.timeframe, current_time , count)
         df = pd.DataFrame(rates)
         df['time'] = pd.to_datetime(df['time'], unit='s')
-        if DEV_MODE:
+        if DEBUG:
             df.to_csv("data_sample.csv") # use to save df to a local file
         return df
 
@@ -138,6 +117,9 @@ class Trader:
     #         print("Trade Successful!...God's Grace!")
     #         return True
 
+    @staticmethod
+    def localize_time():
+        return TIMEZONE.localize(datetime.now())
 
 print('trader module loaded Sucessfully!')
 
