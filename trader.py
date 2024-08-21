@@ -55,6 +55,9 @@ class Trader:
         print("🔥 RSI Value   : ", rsi_value)
         print("🔥 MACD Value  : ", macd_value)
         print("🔥 IM RSI Value: ", im_rsi_value)
+        print("🔥 Candle tales: ", candle_tales)
+
+        return True
 
     def get_data(self, current_time, count=1000):
         rates = mt5.copy_rates_from(self.symbol, self.timeframe, current_time , count)
