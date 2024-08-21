@@ -114,13 +114,23 @@ class Trader:
         return candle_value, active_candlestick
 
     def make_trade_decision(self, price: float, rsi_value: float, candle_sum: float):
-        order = None
+        orders = []
+        # rsi based decision
         if rsi_value <= 20:
-            order = self.account.create_buy_order(self.symbol)
+            order_1 = self.account.create_buy_order(self.symbol)
         elif rsi_value >= 80:
-            order = self.account.create_sell_order(self.symbol)
+            order_1 = self.account.create_sell_order(self.symbol)
         
-        return order
+        # candle stick based decision
+        if candle_sum > 0:
+            order_2 = self.account.create_buy_order(self.symbol)
+        elif candle_sum < 0:
+            order_2 = self.account.create_sell_order(self.symbol)
+
+        if order_1: orders.append(order_1)
+        if order_2: orders.append(order_2)
+        
+        return orders
         
 
     @staticmethod
