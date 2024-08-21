@@ -62,6 +62,8 @@ class Trader:
         candle_sum, candles = candle_tales
         print("🕯️ Candle sum : ", candle_sum)
         print("🕯️ Candles    : ", candles)
+
+        self.make_trade_decision(close_price, rsi_value, candle_sum)
         
         return True
 
@@ -110,34 +112,18 @@ class Trader:
         candle_value = sum(active_columns_value)
         return candle_value, active_candlestick
 
-    # def place_buy_trade(self):
-    #     request_buy = self.setup_buyRequest()
-    #     result = mt5.order_send(request_buy)
-    #     position_id = result.order
-    #     print("1. order_send(): by {} {} lots at {} with deviation={} points".format(self.symbol, self.lot, request_buy["price"], self.deviation))
-    #     if result.retcode != mt5.TRADE_RETCODE_DONE:
-    #         print('Trade Failed! retcode={}'.format(result.retcode))
-    #         return False
-    #     else:
-    #         print("Trade Successful!...God's Grace!")
-    #         return True
-
-    # def place_sell_trade(self):
-    #     request_sell = self.setup_sellRequest()
-    #     result = mt5.order_send(request_sell)
-    #     print("1. order_send(): by {} {} lots at {} with deviation={} points".format(self.symbol, self.lot, request_sell["price"], self.deviation))
-    #     if result.retcode != mt5.TRADE_RETCODE_DONE:
-    #         print('Trade Failed! retcode={}'.format(result.retcode))
-    #         return False
-    #     else:
-    #         print("Trade Successful!...God's Grace!")
-    #         return True
+    def make_trade_decision(self, price: float, rsi_value: float, candle_sum: float):
+        order = None
+        if rsi_value <= 20:
+            order = self.account.create_buy_order(self.symbol)
+        elif rsi_value >= 80:
+            order = self.account.create_sell_order(self.symbol)
+        
+        return order
+        
 
     @staticmethod
     def localize_time():
         return TIMEZONE.localize(datetime.now())
-
-print('trader module loaded Sucessfully!')
-
 
 
