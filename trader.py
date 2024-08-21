@@ -76,7 +76,7 @@ class Trader:
         for value in (candles):
             table[value] = candles[value](open_, high, low, close)
         
-        if DEV_MODE:
+        if DEBUG:
             table.to_csv("candle_history.csv") # use to save df to a local file
 
         df_1 = table[:]
