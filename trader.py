@@ -40,6 +40,8 @@ class Trader:
         self.deviation = deviation
         self.timeframe = timeframe
         self.account.connect()
+        account_info = self.account.info()
+        print("Account Info: ", account_info)
 
     def run(self) -> bool:
         market_data = self.get_data(self.__class__.localize_time())
@@ -67,7 +69,13 @@ class Trader:
             df.to_csv("data_sample.csv") # use to save df to a local file
         return df
 
-    def candle_stick_story(self, data, candles):
+    def candle_stick_story(self, data, candles) -> tuple[int, list]:
+        """
+        Return a tuple containing (candles_sum, [names of candles found])
+
+        +ve candles_sum => 
+        -ve candles_sum => 
+        """
         open_ = data['open']
         high = data['high']
         low = data['low']
