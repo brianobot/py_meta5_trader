@@ -49,7 +49,7 @@ class Trader:
 
         rsi_value = indicators.get_RSI(close_price)
         macd_value = indicators.get_MACD(close_price)
-        im_rsi_value = indicators.get_RSI(close_price, 4).iloc[-1]
+        im_rsi_value = indicators.RSI(close_price, 4).iloc[-1]
 
         print("🔥 Close Price : ", close_price)
         print("🔥 RSI Value   : ", rsi_value)

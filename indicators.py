@@ -14,7 +14,7 @@ def get_MACD(x, timeperiod=14):
     return "MACD Coming soon!"
 
 
-def get_RSI(series, period):
+def RSI(series, period):
     delta = series.diff().dropna()
     u = delta * 0
     d = u.copy()
