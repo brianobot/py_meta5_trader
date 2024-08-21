@@ -39,10 +39,11 @@ class Trader:
         self.lot = lot
         self.deviation = deviation
         self.timeframe = timeframe
+        self.account.connect()
 
     def run(self) -> bool:
-        market_data = self.trader.get_data(self.__class__.localize_time())
-        candle_tales = self.trader.candle_stick_story(market_data, candle_sticks)
+        market_data = self.get_data(self.__class__.localize_time())
+        candle_tales = self.candle_stick_story(market_data, candle_sticks)
 
         close_price = market_data['close']
 
