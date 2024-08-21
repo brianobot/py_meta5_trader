@@ -12,33 +12,27 @@
 import pandas as pd
 import MetaTrader5 as mt5
 
+from mt5 import Account
+
 DEBUG = True
 
 class Trader:
+    """
+    The trader class controls an account and decides on the actions to be perform on the account.
+    """
     def __init__(
-            self, account: int, password: str, server: str, 
-            symbol='EURUSD', lot: float = 0.01, deviation: int = 20, 
-            timeframe = mt5.TIMEFRAME_M1
+            self, 
+            account: Account, 
+            symbol='EURUSD', 
+            lot: float = 0.01, 
+            deviation: int = 20, 
+            timeframe = mt5.TIMEFRAME_M1,
         ):
         self.account = account
-        self.password = password
-        self.server = server
-        self.symbol =  symbol
+        self.symbol = symbol
         self.lot = lot
         self.deviation = deviation
-        self.timeframe = timeframe #timeframe....one minute is recommended for the power of this project
-        self.trades = {}
-        self.gains = {}
-        self.login()
-        print(f"Trader instance has been created with following settings: \n[ACCOUNT_NUMBER]: {self.account}\n[SYMBOL]: {self.symbol}\n[LOT_SIZE]: {self.lot}")
-
-    def login(self) -> bool:
-        authenticated = mt5.login(self.account, self.password, self.server)
-        print(f'CONNECTED to [{self.account} = {authenticated}]')
-        return authenticated
-        
-    # def get_account_info() -> dict:
-    #     info = mt5.account_info()._asdict()
+        self.timeframe = timeframe
 
     # def setup_buyRequest(self):
     #     symbol_info = mt5.symbol_info(self.symbol)
