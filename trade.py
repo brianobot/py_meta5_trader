@@ -13,6 +13,6 @@ def main():
 
 if __name__ == "__main__":
     count = 0
-    while count <= 10:
+    while count <= 100000000000000000000000000:
         main()
         count += 1
