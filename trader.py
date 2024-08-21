@@ -115,6 +115,7 @@ class Trader:
 
     def make_trade_decision(self, price: float, rsi_value: float, candle_sum: float):
         orders = []
+        order_1, order_2 = None, None
         # rsi based decision
         if rsi_value <= 20:
             order_1 = self.account.create_buy_order(self.symbol)
@@ -129,7 +130,7 @@ class Trader:
 
         if order_1: orders.append(order_1)
         if order_2: orders.append(order_2)
-        
+
         return orders
         
 
