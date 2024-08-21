@@ -11,7 +11,6 @@
 """
 import pandas as pd
 import MetaTrader5 as mt5
-from typing import Literal
 
 DEBUG = True
 
@@ -38,50 +37,50 @@ class Trader:
         print(f'CONNECTED to [{self.account} = {authenticated}]')
         return authenticated
         
-    def get_account_info() -> dict:
-        info = mt5.account_info()._asdict()
+    # def get_account_info() -> dict:
+    #     info = mt5.account_info()._asdict()
 
-    def setup_buyRequest(self):
-        symbol_info = mt5.symbol_info(self.symbol)
-        point = symbol_info.point
-        price_buy = mt5.symbol_info_tick(self.symbol).ask 
+    # def setup_buyRequest(self):
+    #     symbol_info = mt5.symbol_info(self.symbol)
+    #     point = symbol_info.point
+    #     price_buy = mt5.symbol_info_tick(self.symbol).ask 
 
-        request_buy = {
-            "action": mt5.TRADE_ACTION_DEAL,
-            "symbol": self.symbol,
-            "volume": self.lot,
-            "type": mt5.ORDER_TYPE_BUY,
-            "price": price_buy,
-            #"sl": price_buy - 5 * point,
-            "tp": price_buy + (5 * point) ,
-            "deviation": 20,
-            "magic": 234000,
-            "comment": "python script open",
-            "type_time": mt5.ORDER_TIME_GTC,
-            "type_filling": mt5.ORDER_FILLING_RETURN, }
+    #     request_buy = {
+    #         "action": mt5.TRADE_ACTION_DEAL,
+    #         "symbol": self.symbol,
+    #         "volume": self.lot,
+    #         "type": mt5.ORDER_TYPE_BUY,
+    #         "price": price_buy,
+    #         #"sl": price_buy - 5 * point,
+    #         "tp": price_buy + (5 * point) ,
+    #         "deviation": 20,
+    #         "magic": 234000,
+    #         "comment": "python script open",
+    #         "type_time": mt5.ORDER_TIME_GTC,
+    #         "type_filling": mt5.ORDER_FILLING_RETURN, }
 
-        return request_buy
+    #     return request_buy
 
-    def setup_sellRequest(self):
-        symbol_info = mt5.symbol_info(self.symbol)
-        point = symbol_info.point
-        price_sell = mt5.symbol_info_tick(self.symbol).bid 
+    # def setup_sellRequest(self):
+    #     symbol_info = mt5.symbol_info(self.symbol)
+    #     point = symbol_info.point
+    #     price_sell = mt5.symbol_info_tick(self.symbol).bid 
 
-        request_sell = {
-            "action": mt5.TRADE_ACTION_DEAL,
-            "symbol": self.symbol,
-            "volume": self.lot,
-            "type": mt5.ORDER_TYPE_SELL,
-            "price": price_sell,
-            #"sl" : price_sell + 5 * point,
-            "tp": price_sell - (5 * point) ,
-            "deviation": 20,
-            "magic": 234000,
-            "comment": "python script close",
-            "type_time": mt5.ORDER_TIME_GTC,
-            "type_filling": mt5.ORDER_FILLING_RETURN, }
+    #     request_sell = {
+    #         "action": mt5.TRADE_ACTION_DEAL,
+    #         "symbol": self.symbol,
+    #         "volume": self.lot,
+    #         "type": mt5.ORDER_TYPE_SELL,
+    #         "price": price_sell,
+    #         #"sl" : price_sell + 5 * point,
+    #         "tp": price_sell - (5 * point) ,
+    #         "deviation": 20,
+    #         "magic": 234000,
+    #         "comment": "python script close",
+    #         "type_time": mt5.ORDER_TIME_GTC,
+    #         "type_filling": mt5.ORDER_FILLING_RETURN, }
 
-        return request_sell
+    #     return request_sell
 
     def get_data(self, current_time, count=1000):
         rates = mt5.copy_rates_from(self.symbol, self.timeframe, current_time , count)
@@ -122,28 +121,28 @@ class Trader:
         candle_value = sum(active_columns_value)
         return candle_value, active_candlestick
 
-    def place_buy_trade(self):
-        request_buy = self.setup_buyRequest()
-        result = mt5.order_send(request_buy)
-        position_id = result.order
-        print("1. order_send(): by {} {} lots at {} with deviation={} points".format(self.symbol, self.lot, request_buy["price"], self.deviation))
-        if result.retcode != mt5.TRADE_RETCODE_DONE:
-            print('Trade Failed! retcode={}'.format(result.retcode))
-            return False
-        else:
-            print("Trade Successful!...God's Grace!")
-            return True
+    # def place_buy_trade(self):
+    #     request_buy = self.setup_buyRequest()
+    #     result = mt5.order_send(request_buy)
+    #     position_id = result.order
+    #     print("1. order_send(): by {} {} lots at {} with deviation={} points".format(self.symbol, self.lot, request_buy["price"], self.deviation))
+    #     if result.retcode != mt5.TRADE_RETCODE_DONE:
+    #         print('Trade Failed! retcode={}'.format(result.retcode))
+    #         return False
+    #     else:
+    #         print("Trade Successful!...God's Grace!")
+    #         return True
 
-    def place_sell_trade(self):
-        request_sell = self.setup_sellRequest()
-        result = mt5.order_send(request_sell)
-        print("1. order_send(): by {} {} lots at {} with deviation={} points".format(self.symbol, self.lot, request_sell["price"], self.deviation))
-        if result.retcode != mt5.TRADE_RETCODE_DONE:
-            print('Trade Failed! retcode={}'.format(result.retcode))
-            return False
-        else:
-            print("Trade Successful!...God's Grace!")
-            return True
+    # def place_sell_trade(self):
+    #     request_sell = self.setup_sellRequest()
+    #     result = mt5.order_send(request_sell)
+    #     print("1. order_send(): by {} {} lots at {} with deviation={} points".format(self.symbol, self.lot, request_sell["price"], self.deviation))
+    #     if result.retcode != mt5.TRADE_RETCODE_DONE:
+    #         print('Trade Failed! retcode={}'.format(result.retcode))
+    #         return False
+    #     else:
+    #         print("Trade Successful!...God's Grace!")
+    #         return True
 
 
 print('trader module loaded Sucessfully!')

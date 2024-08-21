@@ -33,8 +33,10 @@ def still_today() -> bool:
         return False
     return True
 
+
 def time_now():
     return TIMEZONE.localize(datetime.now())
+
 
 def initialize():
     try:
@@ -46,7 +48,8 @@ def initialize():
     else:
         print("Initialization Successful")
         return True, time_now()
-           
+
+
 class Task():
     def __init__(self, trader):
         self.trader = trader
@@ -125,10 +128,12 @@ class TraderManager():
             self.schedule(task)
             time.sleep(10)
 
+
 class Lot(Trader):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.lot = 0.1 #lot size
+
 
 class Lottier(Trader):
     def __init__(self, *args, **kwargs):
