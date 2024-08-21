@@ -63,8 +63,9 @@ class Trader:
         print("🕯️ Candle sum : ", candle_sum)
         print("🕯️ Candles    : ", candles)
 
-        self.make_trade_decision(close_price, rsi_value, candle_sum)
-        
+        order = self.make_trade_decision(close_price, rsi_value, candle_sum)
+        print("📊 Order:  ", order)
+
         return True
 
     def get_data(self, current_time, count=1000):
