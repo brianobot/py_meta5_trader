@@ -10,16 +10,20 @@
  *						                            *
 """
 import pytz
+import logging
 import indicators
 import pandas as pd
 import MetaTrader5 as mt5
 
 from fortune_cards import candle_sticks
 from datetime import datetime
-from mt5 import Account
+from mt5 import Account, TraderOrder
 
 DEBUG = True
 TIMEZONE = pytz.timezone('America/Araguaina')
+
+logging.basicConfig(filename="logs", filemode="w", format="%(name)s → %(levelname)s: %(message)s")
+logger = logging.getLogger(__name__)
 
 
 class Trader:
@@ -41,7 +45,8 @@ class Trader:
         self.timeframe = timeframe
         self.account.connect()
         account_info = self.account.info()
-        print("Account Info: ", account_info)
+        
+        logger.info("Trader Account Instantiated: ", account_info)
 
     def run(self) -> bool:
         market_data = self.get_data(self.__class__.localize_time())
@@ -53,18 +58,18 @@ class Trader:
         macd_value = indicators.get_MACD(close_price)
         im_rsi_value = indicators.RSI(close_price, 4).iloc[-1]
 
-        print("🔥 Close Price : ", close_price)
-        print("🔥 RSI Value   : ", rsi_value)
-        print("🔥 MACD Value  : ", macd_value)
-        print("🔥 IM RSI Value: ", im_rsi_value)
-        print("🔥 Candle tales: ", candle_tales)
+        logging.debug("Close Price : %s", close_price)
+        logging.debug("RSI Value   : %s", rsi_value)
+        logging.debug("MACD Value  : %s", macd_value)
+        logging.debug("IM RSI Value: %s", im_rsi_value)
+        logging.debug("Candle tales: %s", candle_tales)
 
         candle_sum, candles = candle_tales
-        print("🕯️ Candle sum : ", candle_sum)
-        print("🕯️ Candles    : ", candles)
+        logging.debug("Candle sum  : %s", candle_sum)
+        logging.debug("Candles List: %s", candles)
 
         order = self.make_trade_decision(close_price, rsi_value, candle_sum)
-        print("📊 Order:  ", order)
+        logging.debug("Order Created:  %s", order)
 
         return True
 
@@ -108,12 +113,12 @@ class Trader:
                 active_candlestick.append(n)
                 active_columns_value.append(lv)
 
-        print(f'{len(active_candlestick)} Candlestick Pattern(s) found')
+        logging.debug('%s Candlestick Pattern(s) found', len(active_candlestick))
 
         candle_value = sum(active_columns_value)
         return candle_value, active_candlestick
 
-    def make_trade_decision(self, price: float, rsi_value: float, candle_sum: float):
+    def make_trade_decision(self, price: float, rsi_value: float, candle_sum: float) -> list[TraderOrder]:
         orders = []
         order_1, order_2 = None, None
         # rsi based decision
