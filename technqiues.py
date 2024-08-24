@@ -4,16 +4,25 @@ import numpy as np
 
 #module to save all algorithm for making trade decisions as global functions
 
-def get_RSI(x, timeperiod=4):
+def get_RSI(x, timeperiod=4) -> float:
     rsi = ta.RSI(x, timeperiod)
     return rsi.iloc[-1]
 
-def get_MACD(x, timeperiod=14):
+
+def calc_rsi() -> float:
+    """
+    
+    """
+    pass
+
+
+def get_MACD(x, timeperiod=14) -> float:
     macd = ta.MACD(x, timeperiod)
     #return macd[0], macd[1], macd[2]
     return "MACD Coming soon!"
 
-def RSI(series, period):
+
+def RSI(series, period) -> float:
     delta = series.diff().dropna()
     u = delta * 0
     d = u.copy()
