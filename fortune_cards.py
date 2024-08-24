@@ -1,6 +1,6 @@
 import talib as ta
 
-candle_sticks = {   
+candle_sticks = {
     "two_crows": ta.CDL2CROWS,
     "three_black_crows": ta.CDL3BLACKCROWS,
     "three_inside_up_down": ta.CDL3INSIDE,
@@ -13,7 +13,7 @@ candle_sticks = {
     "breakaway": ta.CDLBREAKAWAY,
     "closing_marubozu": ta.CDLCLOSINGMARUBOZU,
     "concealing_baby_swallow": ta.CDLCONCEALBABYSWALL,
-    "counterattack": ta.CDLCOUNTERATTACK ,
+    "counterattack": ta.CDLCOUNTERATTACK,
     "dark_cloud_cover": ta.CDLDARKCLOUDCOVER,
     "doji": ta.CDLDOJI,
     "doji_star": ta.CDLDOJISTAR,
@@ -23,7 +23,7 @@ candle_sticks = {
     "evening_star": ta.CDLEVENINGSTAR,
     "up_down_gap_side_by_side_white_lines": ta.CDLGAPSIDESIDEWHITE,
     "gravestone_doji": ta.CDLGRAVESTONEDOJI,
-    "hammer" :ta.CDLHAMMER,
+    "hammer": ta.CDLHAMMER,
     "hanging_man": ta.CDLHANGINGMAN,
     "harami_pattern": ta.CDLHARAMI,
     "harami_cross_pattern": ta.CDLHARAMICROSS,
@@ -62,5 +62,3 @@ candle_sticks = {
     "upside_gap_two_crows": ta.CDLUPSIDEGAP2CROWS,
     "upside_Downside_gap_three_methods": ta.CDLXSIDEGAP3METHODS,
 }
-
-

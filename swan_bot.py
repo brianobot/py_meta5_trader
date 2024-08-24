@@ -9,5 +9,3 @@
  * Usage:	    For automated trading of forex on mq5*
  *						                            *
 """
-
-

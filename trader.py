@@ -20,9 +20,11 @@ from datetime import datetime
 from mt5 import Account, TraderOrder
 
 DEBUG = True
-TIMEZONE = pytz.timezone('America/Araguaina')
+TIMEZONE = pytz.timezone("America/Araguaina")
 
-logging.basicConfig(filename="logs", filemode="w", format="%(name)s → %(levelname)s: %(message)s")
+logging.basicConfig(
+    filename="logs", filemode="w", format="%(name)s → %(levelname)s: %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -30,14 +32,15 @@ class Trader:
     """
     The trader class controls an account and decides on the actions to be perform on the account.
     """
+
     def __init__(
-            self, 
-            account: Account, 
-            symbol='EURUSD', 
-            lot: float = 0.01, 
-            deviation: int = 20, 
-            timeframe = mt5.TIMEFRAME_M1,
-        ):
+        self,
+        account: Account,
+        symbol="EURUSD",
+        lot: float = 0.01,
+        deviation: int = 20,
+        timeframe=mt5.TIMEFRAME_M1,
+    ):
         self.account = account
         self.symbol = symbol
         self.lot = lot
@@ -45,14 +48,14 @@ class Trader:
         self.timeframe = timeframe
         self.account.connect()
         account_info = self.account.info()
-        
+
         logger.info("Trader Account Instantiated: ", account_info)
 
     def run(self) -> bool:
         market_data = self.get_data(self.__class__.localize_time())
         candle_tales = self.candle_stick_story(market_data, candle_sticks)
 
-        close_price = market_data['close']
+        close_price = market_data["close"]
 
         rsi_value = indicators.get_RSI(close_price)
         macd_value = indicators.get_MACD(close_price)
@@ -74,33 +77,33 @@ class Trader:
         return True
 
     def get_data(self, current_time, count=1000):
-        rates = mt5.copy_rates_from(self.symbol, self.timeframe, current_time , count)
+        rates = mt5.copy_rates_from(self.symbol, self.timeframe, current_time, count)
         df = pd.DataFrame(rates)
-        df['time'] = pd.to_datetime(df['time'], unit='s')
+        df["time"] = pd.to_datetime(df["time"], unit="s")
         if DEBUG:
-            df.to_csv("data_sample.csv") # use to save df to a local file
+            df.to_csv("data_sample.csv")  # use to save df to a local file
         return df
 
     def candle_stick_story(self, data, candles) -> tuple[int, list]:
         """
         Return a tuple containing (candles_sum, [names of candles found])
 
-        +ve candles_sum => 
-        -ve candles_sum => 
+        +ve candles_sum =>
+        -ve candles_sum =>
         """
-        open_ = data['open']
-        high = data['high']
-        low = data['low']
-        close = data['close']
+        open_ = data["open"]
+        high = data["high"]
+        low = data["low"]
+        close = data["close"]
 
         table = pd.DataFrame()
 
-        #refactor this loops and ensure it truthiness
-        for value in (candles):
+        # refactor this loops and ensure it truthiness
+        for value in candles:
             table[value] = candles[value](open_, high, low, close)
-        
+
         if DEBUG:
-            table.to_csv("candle_history.csv") # use to save df to a local file
+            table.to_csv("candle_history.csv")  # use to save df to a local file
 
         df_1 = table[:]
 
@@ -113,12 +116,14 @@ class Trader:
                 active_candlestick.append(n)
                 active_columns_value.append(lv)
 
-        logging.debug('%s Candlestick Pattern(s) found', len(active_candlestick))
+        logging.debug("%s Candlestick Pattern(s) found", len(active_candlestick))
 
         candle_value = sum(active_columns_value)
         return candle_value, active_candlestick
 
-    def make_trade_decision(self, price: float, rsi_value: float, candle_sum: float) -> list[TraderOrder]:
+    def make_trade_decision(
+        self, price: float, rsi_value: float, candle_sum: float
+    ) -> list[TraderOrder]:
         orders = []
         order_1, order_2 = None, None
         # rsi based decision
@@ -126,20 +131,20 @@ class Trader:
             order_1 = self.account.create_buy_order(self.symbol)
         elif rsi_value >= 80:
             order_1 = self.account.create_sell_order(self.symbol)
-        
+
         # candle stick based decision
         if candle_sum > 0:
             order_2 = self.account.create_buy_order(self.symbol)
         elif candle_sum < 0:
             order_2 = self.account.create_sell_order(self.symbol)
 
-        if order_1: orders.append(order_1)
-        if order_2: orders.append(order_2)
+        if order_1:
+            orders.append(order_1)
+        if order_2:
+            orders.append(order_2)
 
         return orders
-        
+
     @staticmethod
     def localize_time():
         return TIMEZONE.localize(datetime.now())
-
-
