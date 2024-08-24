@@ -138,7 +138,6 @@ class Trader:
 
         return orders
         
-
     @staticmethod
     def localize_time():
         return TIMEZONE.localize(datetime.now())
